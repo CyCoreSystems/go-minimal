@@ -2,13 +2,24 @@
 
 `go-minimal` is a tiny Docker base image for running dynamic Go binaries.
 
-Weighing in at just under 2MB, this image is even smaller than Alpine.  More
+Weighing in at just under 4MB, this image is even smaller than Alpine.  More
 importantly, though, it includes the standard glibc, so it will work with normal
 dynamic Go Linux-x64 binaries.
 
 If possible, you should use a `FROM scratch` Docker images with a static Go
-binary.  Unfortunately, sometimes that isn't possible or isn't practical.  This
-image is for those cases.
+binary.  Unfortunately, sometimes that isn't possible or isn't practical. 
+
+In particular, these are are the cases covered by this package:
+
+  - TLS : for most TLS operations, Go still needs the public "trusted" TLS root
+certificates.
+  - Timezones : for timezone translation (such as those provided by the `time`
+    package), we we need the timezone definitions.  These have a habit of being
+    updated relatively often, so it is probably better to bind-mount these from
+    a live system instead, if possible.
+  - cGo : C bindings for Go need the C libraries.
+
+This image is for any of those cases.
 
 ## Usage
 
